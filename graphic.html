@@ -1,0 +1,163 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Graphic Design — Portfolio</title>
+  <link rel="stylesheet" href="graphic.css">
+  <script src="graphic.js" defer></script>
+</head>
+<body>
+  <main class="app">
+
+    <header class="titlebar">
+      <div class="brand"><span class="ps">Ps</span></div>
+      <nav class="menus">
+        <span>File</span><span>Edit</span><span>Image</span>
+        <span>Layer</span><span>Type</span><span>Select</span>
+        <span>Filter</span><span>View</span><span>Window</span>
+        <span>Help</span>
+      </nav>
+      <a class="exit" href="index.html" title="Volver al portfolio">×</a>
+    </header>
+
+    <div class="optionsbar">
+      <span>⌖</span>
+      <span>☑ Auto-Select:</span>
+      <span class="dropdown">Layer⌄</span>
+      <span>□ Show Transform Controls</span>
+      <span class="option-separator"></span>
+      <span>▤</span><span>▥</span><span>▤</span><span>•••</span>
+    </div>
+
+    <div class="main-layout">
+
+      <aside class="tools">
+        <button class="active" title="Move">✥</button>
+        <button title="Selection">▧</button>
+        <button title="Lasso">⌕</button>
+        <button title="Crop">◩</button>
+        <button title="Brush">✎</button>
+        <button title="Healing">◈</button>
+        <button title="Eraser">◩</button>
+        <button title="Gradient">◒</button>
+        <button title="Pen">⌁</button>
+        <button title="Text">T</button>
+        <button title="Pointer">➤</button>
+        <button title="Hand">♧</button>
+        <button title="Zoom">⌕</button>
+        <div class="swatches"><span></span><span></span></div>
+      </aside>
+
+      <section class="center">
+
+        <div class="document-tab">
+          <span class="window-dots"><i></i><i></i><i></i></span>
+          <span id="tab-title">01 — POSTER DESIGN</span>
+          <span class="unsaved">*</span>
+        </div>
+
+        
+<section class="canvas-frame">
+  <div class="canvas-zoom-controls">
+    <button type="button" id="zoom-out" title="Alejar">−</button>
+    <button type="button" id="zoom-level" title="Restablecer zoom">100%</button>
+    <button type="button" id="zoom-in" title="Acercar">+</button>
+    <button type="button" id="zoom-fit" title="Ajustar al lienzo">Fit</button>
+  </div>
+
+  <div class="canvas" id="canvas">
+    <img id="main-image"
+         src="imatges/greta cartell.jpg"
+         alt="Proyecto gráfico seleccionado">
+  </div>
+</section>
+
+
+        <section class="gallery" aria-label="Proyectos gráficos">
+          <div class="gallery-heading">
+            <span>OPEN DOCUMENTS</span>
+            <span id="gallery-count">01 / 05</span>
+          </div>
+          <div class="gallery-items" id="gallery-items"></div>
+        </section>
+
+        <footer class="canvas-status">
+          <span>FIT SCREEN</span>
+          <span id="dimensions">A2 · PORTRAIT</span>
+          <span>RGB / 8</span>
+        </footer>
+
+      </section>
+
+      <aside class="right-panel">
+
+        <section class="info-panel">
+          <div class="panel-tabs">
+            <button class="tab active">Info</button>
+            <button class="tab">Properties</button>
+            <button class="tab">Metadata</button>
+          </div>
+
+          <div class="info-content">
+
+            <div class="info-fields">
+              <label>Title</label>
+              <h1 id="info-title">UNTITLED</h1>
+
+              <label>Category</label>
+              <p id="info-category">Poster Design</p>
+
+              <label>Year</label>
+              <p id="info-year">2026</p>
+            </div>
+
+            <p class="description" id="info-description">
+              A graphic design project exploring typography and composition.
+            </p>
+          </div>
+        </section>
+
+        <section class="layers-panel">
+          <div class="panel-tabs layer-tabs">
+            <button class="tab active">Layers</button>
+            <button class="tab">Channels</button>
+            <button class="tab">Paths</button>
+          </div>
+
+          <div class="filter-row">
+            <span>⌕ Kind⌄</span>
+            <span>▧　◉　T　▣</span>
+          </div>
+
+          <div class="blend-row">
+            <span>Normal⌄</span>
+            <span>Opacity: <b>100%</b></span>
+          </div>
+
+          <div class="lock-row">
+            <span>Lock:</span><span>▦</span><span>✎</span>
+            <span>✥</span><span>♙</span><span>Fill: 100%</span>
+          </div>
+
+          <div id="layers-list" class="layers-list"></div>
+
+          <div class="layer-bottom">
+            <span>∞</span><span>fx</span><span>▣</span>
+            <span>▰</span><span>▧</span><span>▤</span>
+          </div>
+        </section>
+
+      </aside>
+    </div>
+
+    <footer class="app-footer">
+      <span>100%</span>
+      <span>GRAPHIC DESIGN — SELECTED WORKS</span>
+      <span>PORTFOLIO © 2026</span>
+    </footer>
+
+  </main>
+</body>
+</html>

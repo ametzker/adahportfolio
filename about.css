@@ -1,0 +1,145 @@
+
+.about-page {
+  min-height: 100vh;
+  min-height: 100svh;
+  background: #ffffff;
+  color: #29251f;
+  display: flex;
+  flex-direction: column;
+}
+
+/* CABECERA */
+
+.about-header {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 30px 5%;
+}
+
+.back-home {
+  justify-self: start;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 1px;
+}
+
+.about-header h1 {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 3px;
+}
+
+.header-space {
+  justify-self: end;
+}
+
+/* ZONA CENTRAL */
+
+.about-main {
+  position: relative;
+  isolation: isolate;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 70px 24px;
+  overflow: hidden;
+}
+
+/* IMAGEN DE FONDO A PANTALLA COMPLETA */
+
+.about-image {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+
+  background-image: url("imatges/speak%20or%20die.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+
+  opacity: 0.2;
+  pointer-events: none;
+}
+
+
+/* TEXTO SIN JUSTIFICAR */
+
+.about-text {
+  width: min(560px, 100%);
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  line-height: 2;
+  text-align: center;
+}
+
+.about-text p + p {
+  margin-top: 24px;
+}
+
+
+
+/* REDES Y CORREO */
+
+.about-footer {
+  padding: 25px 5% 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.social-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.social-links a,
+.about-footer p {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 1px;
+}
+
+.social-links a {
+  transition: color 0.3s;
+}
+
+.social-links a:hover,
+.back-home:hover {
+  color: #762e2c;
+}
+
+.about-footer p {
+  color: #81796e;
+}
+
+/* MÓVIL */
+
+@media (max-width: 600px) {
+  .about-header {
+    padding: 25px 6%;
+  }
+
+  .about-main {
+    padding: 55px 8%;
+  }
+
+  .about-text {
+    font-size: 12px;
+    line-height: 1.9;
+  }
+
+  .about-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 25px 6%;
+  }
+
+  .social-links {
+    gap: 18px;
+  }
+}
