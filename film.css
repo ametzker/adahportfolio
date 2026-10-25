@@ -415,11 +415,19 @@ a {
 }
 
 .traffic {
-  width: 12px;
-  height: 12px;
+  width: 14px;
+  height: 14px;
+  flex: none;
   border-radius: 50%;
   border: 1px solid #00000022;
   padding: 0;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.traffic:focus-visible {
+  outline: 2px solid #2667b7;
+  outline-offset: 2px;
 }
 
 .traffic.close {
@@ -454,6 +462,12 @@ a {
   grid-template-columns: minmax(0, 1.7fr) minmax(190px, 0.7fr);
   overflow: auto;
   min-height: 0;
+}
+
+.window-content {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
 }
 
 .media {
@@ -818,11 +832,11 @@ a {
   .folder-icon {
     left: auto;
     right: 12px;
-    top: 25px;
+    top: 100px;
   }
 
   .second-folder {
-    top: 120px;
+    top: 190px;
   }
 
   .document-icon {
@@ -866,6 +880,15 @@ a {
   .titlebar {
     grid-template-columns: 58px 1fr 50px;
     padding: 0 8px;
+  }
+
+  .lights {
+    gap: 5px;
+  }
+
+  .traffic {
+    width: 17px;
+    height: 17px;
   }
 
   .photo-window {

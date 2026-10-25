@@ -47,7 +47,7 @@ const projects = [
     category: 'Short film',
     role: 'Art Direction',
     type: 'youtube',
-    src: 'https://www.youtube.com/embed/watch?v=0XFAxlzHGI4',
+    src: 'https://www.youtube.com/embed/0XFAxlzHGI4',
     thumbnail: 'images/miniatura-magnificent.png'
   }
 ];
@@ -71,6 +71,7 @@ const scatter = $('#scatter');
 
 let z = 20;
 let activeCategory = 'All';
+let activeWindow = null;
 
 const offsets = [
   [.10, .14, -3],
@@ -85,6 +86,51 @@ const offsets = [
 
 function bringFront(el) {
   el.style.zIndex = ++z;
+
+  if (el.classList.contains('win')) {
+    activeWindow = el;
+  }
+}
+
+function stopWindowMedia(w) {
+  w.querySelectorAll('video, audio').forEach(media => {
+    media.pause();
+    media.removeAttribute('src');
+    media.load();
+  });
+
+  w.querySelectorAll('iframe').forEach(frame => {
+    frame.src = 'about:blank';
+    frame.remove();
+  });
+}
+
+function closeWindow(w) {
+  if (!w?.isConnected) return;
+
+  stopWindowMedia(w);
+  w.remove();
+
+  if (activeWindow === w) {
+    activeWindow = [...windows.querySelectorAll('.win')]
+      .sort((a, b) => Number(a.style.zIndex) - Number(b.style.zIndex))
+      .at(-1) || null;
+  }
+}
+
+function getOpenWindow(key) {
+  if (!key) return null;
+
+  const w = [...windows.querySelectorAll('.win')]
+    .find(candidate => candidate.dataset.windowKey === key);
+
+  if (!w) return null;
+
+  w.classList.remove('minimized');
+  w.querySelector('.window-content').hidden = false;
+  w.querySelector('.status').hidden = false;
+  bringFront(w);
+  return w;
 }
 
 function drag(handle, target) {
@@ -94,11 +140,7 @@ function drag(handle, target) {
   handle.addEventListener('pointerdown', e => {
     if (e.button !== undefined && e.button !== 0) return;
 
-    if (
-      e.target.closest('button') &&
-      !e.target.classList.contains('traffic') &&
-      handle !== target
-    ) return;
+    if (handle !== target && e.target.closest('button, a, input, select, textarea')) return;
 
     down = true;
     delete target.dataset.dragged;
@@ -124,13 +166,14 @@ function drag(handle, target) {
 
     if (Math.abs(e.clientX - sx) > 4 || Math.abs(e.clientY - sy) > 4) {
       target.dataset.dragged = 'true';
+      target.dataset.userPositioned = 'true';
     }
 
     let x = left + e.clientX - sx;
     let y = top + e.clientY - sy;
     const p = desktop.getBoundingClientRect();
 
-    x = Math.max(0, Math.min(p.width - target.offsetWidth, x));
+    x = Math.max(0, Math.min(Math.max(0, p.width - target.offsetWidth), x));
     y = Math.max(0, Math.min(p.height - 30, y));
 
     target.style.left = x + 'px';
@@ -143,12 +186,18 @@ function drag(handle, target) {
   });
 }
 
-function makeWindow(title, kind = '') {
+function makeWindow(title, kind = '', key = '') {
+  const existing = getOpenWindow(key);
+  if (existing) return existing;
+
   const w = document.createElement('section');
   w.className = 'win';
-  w.style.left = Math.max(8, desktop.clientWidth / 2 - 380 + (windows.children.length % 4) * 23) + 'px';
-  w.style.top = Math.max(12, desktop.clientHeight / 2 - 230 + (windows.children.length % 4) * 19) + 'px';
-  w.style.zIndex = ++z;
+  w.dataset.windowKey = key;
+
+  const cascade = windows.querySelectorAll('.win').length % 4;
+  const windowWidth = Math.min(820, desktop.clientWidth - 18);
+  w.style.left = Math.max(8, (desktop.clientWidth - windowWidth) / 2 + cascade * 18) + 'px';
+  w.style.top = Math.max(12, desktop.clientHeight / 2 - 230 + cascade * 16) + 'px';
 
   w.innerHTML = `
     <header class="titlebar">
@@ -167,10 +216,13 @@ function makeWindow(title, kind = '') {
   w.querySelector('.wtitle').textContent = title;
   w.querySelector('.kind').textContent = kind;
 
-  w.querySelector('.traffic.close').onclick = () => {
-    w.querySelectorAll('video').forEach(v => v.pause());
-    w.remove();
-  };
+  const close = w.querySelector('.traffic.close');
+  close.addEventListener('pointerdown', e => e.stopPropagation());
+  close.addEventListener('click', e => {
+    e.preventDefault();
+    e.stopPropagation();
+    closeWindow(w);
+  });
 
   w.querySelector('.traffic.min').onclick = () => {
     w.classList.toggle('minimized');
@@ -184,7 +236,8 @@ function makeWindow(title, kind = '') {
         left: w.style.left,
         top: w.style.top,
         width: w.style.width,
-        height: w.style.height
+        height: w.style.height,
+        maxHeight: w.style.maxHeight
       });
 
       w.style.left = '8px';
@@ -200,6 +253,7 @@ function makeWindow(title, kind = '') {
   w.addEventListener('pointerdown', () => bringFront(w));
   drag(w.querySelector('.titlebar'), w);
   windows.append(w);
+  bringFront(w);
 
   return w;
 }
@@ -220,7 +274,11 @@ function categoryText(category, fallback = 'Film') {
 }
 
 function openProject(p) {
-  const w = makeWindow(p.title);
+  const key = `project:${p.id || p.src || p.title}`;
+  const existing = getOpenWindow(key);
+  if (existing) return;
+
+  const w = makeWindow(p.title, 'VIDEO', key);
   const body = document.createElement('div');
   body.className = 'window-body';
 
@@ -266,7 +324,7 @@ function openProject(p) {
   }
 
   body.append(media, info);
-  w.querySelector('.window-content').replaceWith(body);
+  w.querySelector('.window-content').replaceChildren(body);
 
   w.querySelector('.status span').textContent =
     categoryText(p.category, 'PROJECT') + ' · ' + (p.year || '');
@@ -318,6 +376,7 @@ function photoWindow(p, pos) {
     }
 
     openProject({
+      id: `photo:${p.src}`,
       title: p.title,
       year: '—',
       category: 'Photography',
@@ -350,7 +409,10 @@ function scatterCollection(project) {
 }
 
 function openPhotos() {
-  const w = makeWindow('Photo Archive', 'GALLERY');
+  const existing = getOpenWindow('photos');
+  if (existing) return;
+
+  const w = makeWindow('Photo Archive', 'GALLERY', 'photos');
   const gallery = document.createElement('div');
   gallery.className = 'photo-gallery';
 
@@ -376,6 +438,7 @@ function openPhotos() {
     item.append(im, caption, meta);
 
     item.addEventListener('click', () => openProject({
+      id: `photo:${p.src}`,
       title: p.title,
       year: '—',
       category: 'Photography',
@@ -387,7 +450,7 @@ function openPhotos() {
     gallery.append(item);
   });
 
-  w.querySelector('.window-content').replaceWith(gallery);
+  w.querySelector('.window-content').replaceChildren(gallery);
   w.querySelector('.status span').textContent = photos.length + ' PHOTOGRAPHS · ALL PROJECTS';
 }
 
@@ -411,46 +474,7 @@ function createProjectFiles() {
 
   desktop.append(holder);
 
-  function getRandomPosition(index, occupied) {
-    const width = desktop.clientWidth;
-    const height = desktop.clientHeight;
-
-    const iconWidth = window.innerWidth <= 700 ? 76 : 108;
-    const iconHeight = 100;
-    const margin = 16;
-    const topMin = 35;
-    const bottomSpace = 100;
-
-    const maxX = Math.max(margin, width - iconWidth - margin);
-    const maxY = Math.max(topMin, height - iconHeight - bottomSpace);
-
-    let x = margin;
-    let y = topMin;
-
-    for (let attempt = 0; attempt < 100; attempt++) {
-      x = margin + Math.random() * (maxX - margin);
-      y = topMin + Math.random() * (maxY - topMin);
-
-      const overlaps = occupied.some(pos => {
-        const dx = x - pos.x;
-        const dy = y - pos.y;
-
-        return Math.abs(dx) < iconWidth + 24 &&
-               Math.abs(dy) < iconHeight + 12;
-      });
-
-      if (!overlaps) break;
-    }
-
-    occupied.push({ x, y });
-    return { x, y };
-  }
-
-  const occupied = [];
-
-  projects.forEach((p, i) => {
-    const pos = getRandomPosition(i, occupied);
-
+  projects.forEach(p => {
     const b = document.createElement('button');
     b.type = 'button';
     b.className = 'desktop-icon project-icon';
@@ -460,8 +484,6 @@ function createProjectFiles() {
       ? p.category.join('|')
       : (p.category || '');
 
-    b.style.left = `${pos.x}px`;
-    b.style.top = `${pos.y}px`;
     b.style.pointerEvents = 'auto';
 
     if (p.thumbnail) {
@@ -512,6 +534,49 @@ function createProjectFiles() {
     drag(b, b);
     holder.append(b);
   });
+
+  layoutProjectIcons();
+}
+
+function layoutProjectIcons() {
+  const icons = [...document.querySelectorAll('.project-icon:not([hidden])')]
+    .filter(icon => icon.dataset.userPositioned !== 'true');
+
+  if (!icons.length) return;
+
+  const mobile = desktop.clientWidth <= 700;
+  const columns = mobile ? 2 : Math.min(3, icons.length);
+  const rows = Math.ceil(icons.length / columns);
+  const left = mobile ? 12 : 24;
+  const right = mobile ? 92 : 130;
+  const top = mobile ? 115 : 88;
+  const bottom = 92;
+  const availableWidth = Math.max(1, desktop.clientWidth - left - right);
+  const availableHeight = Math.max(1, desktop.clientHeight - top - bottom);
+  const cellWidth = availableWidth / columns;
+  const cellHeight = availableHeight / rows;
+
+  icons.forEach((icon, index) => {
+    const row = Math.floor(index / columns);
+    const column = index % columns;
+    const stagger = row % 2 === 0 ? 0 : Math.min(24, cellWidth * 0.12);
+    const x = left + column * cellWidth + (cellWidth - icon.offsetWidth) / 2 + stagger;
+    const y = top + row * cellHeight + (cellHeight - icon.offsetHeight) / 2;
+
+    icon.style.left = `${Math.max(0, Math.round(x))}px`;
+    icon.style.top = `${Math.max(top, Math.round(y))}px`;
+    icon.style.transform = 'none';
+  });
+}
+
+function keepElementsInDesktop() {
+  [...windows.querySelectorAll('.win'), ...scatter.querySelectorAll('.photo-window')]
+    .forEach(el => {
+      const maxX = Math.max(0, desktop.clientWidth - el.offsetWidth);
+      const maxY = Math.max(0, desktop.clientHeight - 55);
+      el.style.left = `${Math.max(0, Math.min(maxX, el.offsetLeft))}px`;
+      el.style.top = `${Math.max(0, Math.min(maxY, el.offsetTop))}px`;
+    });
 }
 
 function createCategoryBar() {
@@ -567,10 +632,15 @@ function setCategory(category) {
   if (folder) {
     folder.hidden = category !== 'All' && category !== 'Photography';
   }
+
+  requestAnimationFrame(layoutProjectIcons);
 }
 
 function openFilmFolder() {
-  const w = makeWindow('Film', 'FOLDER');
+  const existing = getOpenWindow('film-folder');
+  if (existing) return;
+
+  const w = makeWindow('Film', 'FOLDER', 'film-folder');
   const list = document.createElement('div');
   list.className = 'folder-list';
 
@@ -587,12 +657,15 @@ function openFilmFolder() {
     list.append(b);
   });
 
-  w.querySelector('.window-content').replaceWith(list);
+  w.querySelector('.window-content').replaceChildren(list);
   w.querySelector('.status span').textContent = projects.length + ' ITEMS';
 }
 
 function openAbout() {
-  const w = makeWindow('About.txt', 'TEXT');
+  const existing = getOpenWindow('about');
+  if (existing) return;
+
+  const w = makeWindow('About.txt', 'TEXT', 'about');
   const d = document.createElement('div');
   d.className = 'about-body';
 
@@ -603,7 +676,7 @@ function openAbout() {
   p2.textContent = 'An evolving archive of moving images and stills.';
 
   d.append(p, p2);
-  w.querySelector('.window-content').replaceWith(d);
+  w.querySelector('.window-content').replaceChildren(d);
 }
 
 $('#photo-folder')?.addEventListener('click', () => {
@@ -665,9 +738,13 @@ document.addEventListener('pointerdown', e => {
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
     document.querySelector('.menu-pop')?.remove();
-    const w = windows.lastElementChild;
-    if (w) w.remove();
+    closeWindow(activeWindow);
   }
+});
+
+window.addEventListener('resize', () => {
+  layoutProjectIcons();
+  keepElementsInDesktop();
 });
 
 function clock() {
