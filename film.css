@@ -1009,15 +1009,28 @@ a {
   }
 }
 
-/* Archivos dispersos por el escritorio */
+/* Archivos del escritorio: cuadrícula estable, sin solapamientos */
 #project-files {
   position: absolute;
-  inset: 0;
-  pointer-events: none;
+  top: 88px;
+  right: 130px;
+  bottom: 92px;
+  left: 24px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(108px, 1fr));
+  grid-template-rows: repeat(2, minmax(120px, 1fr));
+  align-items: center;
+  justify-items: center;
+  gap: 16px 24px;
+  overflow-y: auto;
+  pointer-events: auto;
 }
 
 #project-files .project-icon {
-  position: absolute;
+  position: relative;
+  left: auto !important;
+  top: auto !important;
+  transform: none !important;
   pointer-events: auto;
   z-index: 3;
 }
@@ -1036,4 +1049,16 @@ a {
   padding: 2px 4px;
   border-radius: 3px;
   text-shadow: 0 1px 3px #ffffff80;
+}
+
+@media (max-width: 700px) {
+  #project-files {
+    top: 115px;
+    right: 92px;
+    bottom: 92px;
+    left: 12px;
+    grid-template-columns: repeat(2, minmax(68px, 1fr));
+    grid-template-rows: repeat(3, minmax(140px, 1fr));
+    gap: 10px 16px;
+  }
 }

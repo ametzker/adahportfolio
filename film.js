@@ -509,9 +509,6 @@ function createProjectFiles() {
   holder.id = 'project-files';
 
   holder.style.cssText = `
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
     z-index: 3;
   `;
 
@@ -551,11 +548,6 @@ function createProjectFiles() {
     b.append(name);
 
     b.addEventListener('click', () => {
-      if (b.dataset.dragged === 'true') {
-        delete b.dataset.dragged;
-        return;
-      }
-
       document.querySelectorAll('.project-icon.selected')
         .forEach(el => el.classList.remove('selected'));
 
@@ -572,43 +564,7 @@ function createProjectFiles() {
       }
     });
 
-    b.addEventListener('pointerdown', () => bringFront(b));
-
-    drag(b, b);
     holder.append(b);
-  });
-
-  layoutProjectIcons();
-}
-
-function layoutProjectIcons() {
-  const icons = [...document.querySelectorAll('.project-icon:not([hidden])')]
-    .filter(icon => icon.dataset.userPositioned !== 'true');
-
-  if (!icons.length) return;
-
-  const mobile = desktop.clientWidth <= 700;
-  const columns = mobile ? 2 : Math.min(3, icons.length);
-  const rows = Math.ceil(icons.length / columns);
-  const left = mobile ? 12 : 24;
-  const right = mobile ? 92 : 130;
-  const top = mobile ? 115 : 88;
-  const bottom = 92;
-  const availableWidth = Math.max(1, desktop.clientWidth - left - right);
-  const availableHeight = Math.max(1, desktop.clientHeight - top - bottom);
-  const cellWidth = availableWidth / columns;
-  const cellHeight = availableHeight / rows;
-
-  icons.forEach((icon, index) => {
-    const row = Math.floor(index / columns);
-    const column = index % columns;
-    const stagger = row % 2 === 0 ? 0 : Math.min(24, cellWidth * 0.12);
-    const x = left + column * cellWidth + (cellWidth - icon.offsetWidth) / 2 + stagger;
-    const y = top + row * cellHeight + (cellHeight - icon.offsetHeight) / 2;
-
-    icon.style.left = `${Math.max(0, Math.round(x))}px`;
-    icon.style.top = `${Math.max(top, Math.round(y))}px`;
-    icon.style.transform = 'none';
   });
 }
 
@@ -678,7 +634,6 @@ function setCategory(category) {
     folder.hidden = category !== 'All' && category !== 'Photography';
   }
 
-  requestAnimationFrame(layoutProjectIcons);
 }
 
 function openFilmFolder() {
@@ -788,7 +743,6 @@ document.addEventListener('keydown', e => {
 });
 
 window.addEventListener('resize', () => {
-  layoutProjectIcons();
   keepElementsInDesktop();
 });
 
