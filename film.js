@@ -1,7 +1,7 @@
 const projects = [
   {
     id: 'greta',
-    title: 'GRETA',
+    title: 'GRETA | IN-EDIT × Reteena × Cruïlla',
     year: '2026',
     category: ['Documentary', 'Postproduction'],
     role: 'Production · Editing · Camera · Graphic design',
