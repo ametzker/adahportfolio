@@ -109,13 +109,66 @@ function closeWindow(w) {
   if (!w?.isConnected) return;
 
   stopWindowMedia(w);
+  w._dockItem?.remove();
   w.remove();
 
   if (activeWindow === w) {
-    activeWindow = [...windows.querySelectorAll('.win')]
+    activeWindow = [...windows.querySelectorAll('.win:not([hidden])')]
       .sort((a, b) => Number(a.style.zIndex) - Number(b.style.zIndex))
       .at(-1) || null;
   }
+}
+
+function restoreWindow(w) {
+  if (!w?.isConnected) return;
+
+  w.hidden = false;
+  w.classList.remove('minimized');
+  w._dockItem?.remove();
+  w._dockItem = null;
+  bringFront(w);
+}
+
+function minimizeWindow(w) {
+  if (!w?.isConnected || w.hidden) return;
+
+  const dock = $('.dock');
+  const item = document.createElement('button');
+  const title = w.querySelector('.wtitle')?.textContent || 'Ventana';
+
+  item.type = 'button';
+  item.className = 'minimized-window';
+  item.title = `Restaurar ${title}`;
+  item.setAttribute('aria-label', `Restaurar ${title}`);
+
+  const preview = document.createElement('span');
+  preview.className = 'minimized-window-preview';
+  preview.textContent = title;
+  item.append(preview);
+
+  item.addEventListener('click', () => restoreWindow(w));
+  dock.append(item);
+
+  w._dockItem = item;
+  w.classList.add('minimized');
+  w.hidden = true;
+
+  if (activeWindow === w) {
+    activeWindow = [...windows.querySelectorAll('.win:not([hidden])')]
+      .sort((a, b) => Number(a.style.zIndex) - Number(b.style.zIndex))
+      .at(-1) || null;
+  }
+}
+
+function toggleMaximizeWindow(w) {
+  if (!w?.isConnected) return;
+
+  const maximized = w.classList.toggle('maximized');
+  const button = w.querySelector('.traffic.max');
+
+  button.setAttribute('aria-pressed', String(maximized));
+  button.setAttribute('aria-label', maximized ? 'Restaurar tamaño' : 'Maximizar');
+  bringFront(w);
 }
 
 function getOpenWindow(key) {
@@ -126,10 +179,7 @@ function getOpenWindow(key) {
 
   if (!w) return null;
 
-  w.classList.remove('minimized');
-  w.querySelector('.window-content').hidden = false;
-  w.querySelector('.status').hidden = false;
-  bringFront(w);
+  restoreWindow(w);
   return w;
 }
 
@@ -141,6 +191,7 @@ function drag(handle, target) {
     if (e.button !== undefined && e.button !== 0) return;
 
     if (handle !== target && e.target.closest('button, a, input, select, textarea')) return;
+    if (target.classList.contains('maximized')) return;
 
     down = true;
     delete target.dataset.dragged;
@@ -202,9 +253,9 @@ function makeWindow(title, kind = '', key = '') {
   w.innerHTML = `
     <header class="titlebar">
       <div class="lights">
-        <button class="traffic close" aria-label="Cerrar"></button>
-        <button class="traffic min" aria-label="Minimizar"></button>
-        <button class="traffic max" aria-label="Ampliar"></button>
+        <button class="traffic close" aria-label="Cerrar"><span aria-hidden="true">×</span></button>
+        <button class="traffic min" aria-label="Minimizar"><span aria-hidden="true">−</span></button>
+        <button class="traffic max" aria-label="Maximizar" aria-pressed="false"><span aria-hidden="true">↗</span></button>
       </div>
       <span class="wtitle"></span>
       <small class="kind"></small>
@@ -224,31 +275,23 @@ function makeWindow(title, kind = '', key = '') {
     closeWindow(w);
   });
 
-  w.querySelector('.traffic.min').onclick = () => {
-    w.classList.toggle('minimized');
-    w.querySelector('.window-content').hidden = w.classList.contains('minimized');
-    w.querySelector('.status').hidden = w.classList.contains('minimized');
-  };
+  const minimize = w.querySelector('.traffic.min');
+  minimize.addEventListener('click', e => {
+    e.preventDefault();
+    e.stopPropagation();
+    minimizeWindow(w);
+  });
 
-  w.querySelector('.traffic.max').onclick = () => {
-    if (!w.dataset.old) {
-      w.dataset.old = JSON.stringify({
-        left: w.style.left,
-        top: w.style.top,
-        width: w.style.width,
-        height: w.style.height,
-        maxHeight: w.style.maxHeight
-      });
+  const maximize = w.querySelector('.traffic.max');
+  maximize.addEventListener('click', e => {
+    e.preventDefault();
+    e.stopPropagation();
+    toggleMaximizeWindow(w);
+  });
 
-      w.style.left = '8px';
-      w.style.top = '8px';
-      w.style.width = 'calc(100% - 16px)';
-      w.style.maxHeight = 'calc(100% - 60px)';
-    } else {
-      Object.assign(w.style, JSON.parse(w.dataset.old));
-      w.dataset.old = '';
-    }
-  };
+  w.querySelector('.titlebar').addEventListener('dblclick', e => {
+    if (!e.target.closest('.traffic')) toggleMaximizeWindow(w);
+  });
 
   w.addEventListener('pointerdown', () => bringFront(w));
   drag(w.querySelector('.titlebar'), w);
@@ -572,6 +615,8 @@ function layoutProjectIcons() {
 function keepElementsInDesktop() {
   [...windows.querySelectorAll('.win'), ...scatter.querySelectorAll('.photo-window')]
     .forEach(el => {
+      if (el.classList.contains('maximized')) return;
+
       const maxX = Math.max(0, desktop.clientWidth - el.offsetWidth);
       const maxY = Math.max(0, desktop.clientHeight - 55);
       el.style.left = `${Math.max(0, Math.min(maxX, el.offsetLeft))}px`;

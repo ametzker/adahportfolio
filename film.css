@@ -394,6 +394,23 @@ a {
   backdrop-filter: blur(22px);
 }
 
+.win[hidden] {
+  display: none !important;
+}
+
+.win.maximized {
+  left: 8px !important;
+  top: 8px !important;
+  width: calc(100% - 16px) !important;
+  height: calc(100% - 16px) !important;
+  max-height: none;
+  transform: none !important;
+}
+
+.win.maximized .window-body {
+  height: 100%;
+}
+
 .titlebar {
   height: 39px;
   flex: none;
@@ -423,6 +440,26 @@ a {
   padding: 0;
   cursor: pointer;
   touch-action: manipulation;
+}
+
+.traffic span {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  color: #38110f;
+  font: 700 10px/1 Arial, sans-serif;
+  opacity: 0;
+}
+
+.traffic.max span {
+  color: #0b3b16;
+  font-size: 8px;
+}
+
+.lights:hover .traffic span,
+.lights:focus-within .traffic span {
+  opacity: 0.72;
 }
 
 .traffic:focus-visible {
@@ -468,6 +505,39 @@ a {
   flex: 1 1 auto;
   min-height: 0;
   overflow: auto;
+}
+
+/* Ventanas minimizadas, como miniaturas en el Dock de macOS */
+.dock .minimized-window {
+  position: relative;
+}
+
+.minimized-window-preview {
+  width: 31px;
+  height: 24px;
+  display: block;
+  overflow: hidden;
+  padding: 5px 3px 0;
+  border: 1px solid #8e969a;
+  border-radius: 3px;
+  background: linear-gradient(#f8f8f6 0 23%, #d8dde0 23% 100%);
+  color: #4a5053;
+  font: 6px/1.1 var(--sans);
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dock .minimized-window::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -5px;
+  width: 4px;
+  height: 4px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: #4c5960;
 }
 
 .media {
