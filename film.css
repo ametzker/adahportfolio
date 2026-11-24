@@ -1,4 +1,3 @@
-
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500&display=swap');
 
 
@@ -108,10 +107,10 @@ a {
   isolation: isolate;
   flex: 1;
   overflow: hidden;
-  background:
-    radial-gradient(ellipse at 22% 20%, #f1f0e9 0%, transparent 43%),
-    radial-gradient(ellipse at 78% 85%, #9daebc 0%, transparent 52%),
-    linear-gradient(135deg, #c5d2da, #e5e5df 48%, #aabac6);
+  background-image: url("images/58a5bb15fb9f47eb2aa930456dbe39da.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .desktop-icon,
@@ -174,50 +173,116 @@ a {
   top: 234px;
 }
 
+
+/* ========================================
+   MACOS FINDER — REALISTIC BLUE FOLDERS
+======================================== */
+
+.folder-icon,
+.second-folder {
+  cursor: grab;
+}
+
+.folder-icon:active,
+.second-folder:active {
+  cursor: grabbing;
+}
+
 .folder-art {
   position: relative;
   display: block;
-  width: 47px;
-  height: 34px;
-  margin-top: 5px;
-  border-radius: 5px 6px 5px 5px;
-  background: linear-gradient(155deg, #c8e3f4 0%, #82b7e1 55%, #6197c8 100%);
-  border: 1px solid #4c84b6;
-  box-shadow: 0 5px 12px #1c2d3d40;
+  width: 56px;
+  height: 39px;
+  margin: 0 auto 8px;
+  border-radius: 4px 5px 5px 5px;
+  overflow: visible;
+
+  background:
+    linear-gradient(
+      180deg,
+      #b9e0ff 0%,
+      #8bc5f4 12%,
+      #66adeb 38%,
+      #4b96dc 72%,
+      #3981c9 100%
+    );
+
+  border: 1px solid #4389c6;
+
+  box-shadow:
+    inset 0 1px 1px rgba(255,255,255,.85),
+    inset 1px 0 1px rgba(255,255,255,.35),
+    inset -1px 0 2px rgba(31,91,145,.16),
+    inset 0 -2px 3px rgba(35,91,145,.25),
+    0 2px 3px rgba(25,54,80,.12),
+    0 5px 9px rgba(25,54,80,.18);
+
+  transform: perspective(100px) rotateX(-1deg);
 }
+
+/* Pestaña superior */
 
 .folder-art:before {
   content: "";
   position: absolute;
   left: 2px;
-  top: -6px;
-  width: 20px;
-  height: 8px;
+  top: -8px;
+  width: 24px;
+  height: 10px;
+
   border-radius: 4px 4px 0 0;
-  background: #a6d0ef;
-  border: 1px solid #5e9ccc;
-  border-bottom: 0;
+
+  background: linear-gradient(
+    180deg,
+    #c8e8ff 0%,
+    #9bcdf3 55%,
+    #78b5e9 100%
+  );
+
+  border: 1px solid #6aa8dc;
+  border-bottom: none;
+
+  box-shadow:
+    inset 0 1px 1px rgba(255,255,255,.9),
+    0 -1px 1px rgba(255,255,255,.3);
 }
+
+/* Reflejo superior */
+
+.folder-art:after {
+  content: "";
+  position: absolute;
+  left: 1px;
+  right: 1px;
+  top: 1px;
+  height: 12px;
+
+  border-radius: 3px 4px 0 0;
+
+  background: linear-gradient(
+    180deg,
+    rgba(255,255,255,.48),
+    rgba(255,255,255,.12) 65%,
+    transparent
+  );
+
+  pointer-events: none;
+}
+
+/* Brillo inferior */
 
 .folder-art i {
   position: absolute;
-  inset: 2px;
-  border-radius: 3px;
-  background: linear-gradient(180deg, #ffffff45, transparent);
+  left: 2px;
+  right: 2px;
+  bottom: 2px;
+  height: 1px;
+
+  background: rgba(255,255,255,.28);
+  border-radius: 50%;
+  pointer-events: none;
 }
 
-.doc-art {
-  display: grid;
-  place-items: center;
-  width: 37px;
-  height: 45px;
-  border-radius: 4px;
-  background: linear-gradient(135deg, #fff, #e7e9eb);
-  box-shadow: 0 4px 12px #1c2d3d3a;
-  color: #6b7780;
-  font-size: 22px;
-  text-shadow: none;
-}
 
 /* DOCK */
 
@@ -1009,56 +1074,111 @@ a {
   }
 }
 
-/* Archivos del escritorio: cuadrícula estable, sin solapamientos */
+/* ARCHIVOS DEL ESCRITORIO: MOVIBLES */
+
+/* ARCHIVOS DEL ESCRITORIO: POSICIONES LIBRES */
+
 #project-files {
   position: absolute;
-  top: 88px;
-  right: 130px;
-  bottom: 92px;
-  left: 24px;
-  display: grid;
-  grid-template-columns: repeat(3, minmax(108px, 1fr));
-  grid-template-rows: repeat(2, minmax(120px, 1fr));
-  align-items: center;
-  justify-items: center;
-  gap: 16px 24px;
-  overflow-y: auto;
-  pointer-events: auto;
+  inset: 0;
+  display: block;
+  pointer-events: none;
+  overflow: visible;
 }
 
 #project-files .project-icon {
-  position: relative;
-  left: auto !important;
-  top: auto !important;
-  transform: none !important;
+  position: absolute;
+  width: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 2px;
+  background: transparent;
+  border: none;
+  box-shadow: none;
   pointer-events: auto;
-  z-index: 3;
+  cursor: grab;
+  touch-action: none;
 }
 
-#project-files .project-icon:hover {
-  background: #ffffff30;
-  border-color: #ffffff50;
+#project-files .project-icon:active {
+  cursor: grabbing;
 }
 
-#project-files .project-icon.selected {
-  background: #ffffff45;
-  border-color: #ffffff65;
+.project-icon {
+  position: absolute;
+  pointer-events: auto;
+  cursor: grab;
+  touch-action: none;
 }
 
-#project-files .project-name {
-  padding: 2px 4px;
-  border-radius: 3px;
-  text-shadow: 0 1px 3px #ffffff80;
+.project-icon:active {
+  cursor: grabbing;
 }
 
-@media (max-width: 700px) {
-  #project-files {
-    top: 115px;
-    right: 92px;
-    bottom: 92px;
-    left: 12px;
-    grid-template-columns: repeat(2, minmax(68px, 1fr));
-    grid-template-rows: repeat(3, minmax(140px, 1fr));
-    gap: 10px 16px;
-  }
+
+
+/* ICONOS DE CARPETA MAC */
+
+.folder-image {
+  display: block;
+  width: 64px;
+  height: 54px;
+  object-fit: contain;
+  margin: 0 auto 5px;
+  border: none;
+  background: none;
+  box-shadow: none;
 }
+
+/* =========================================
+   ORDEN CORRECTO DE CAPAS DEL ESCRITORIO
+========================================= */
+
+/* Carpetas e iconos de archivos: detrás */
+#photo-folder,
+#film-folder,
+#project-files {
+  z-index: 1 !important;
+}
+
+/* Archivos individuales */
+#project-files .project-icon {
+  z-index: 1 !important;
+}
+
+/* Fotos dispersas: por delante de iconos */
+#scatter {
+  z-index: 20 !important;
+  pointer-events: none;
+}
+
+#scatter .photo-window {
+  z-index: 20 !important;
+  pointer-events: auto;
+}
+
+/* Ventanas Finder */
+#windows {
+  z-index: 30 !important;
+  pointer-events: none;
+}
+
+#windows .win {
+  z-index: 30 !important;
+  pointer-events: auto;
+}
+
+/* Dock */
+.dock {
+  z-index: 900 !important;
+}
+
+.dock button img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  display: block;
+}
+

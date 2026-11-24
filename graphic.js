@@ -24,6 +24,16 @@ const projects = [
       { title: "Name design", image: "imatges/ethernoms.png" },
     ]
   },
+   {
+    title: "ARRE PRODUCTIONS POST DESIGN",
+    category: "Poster Design",
+    year: "2026",
+    description: "Post design for Son of a Witch event powered by ARRE Productions.",
+    dimensions: "Instagram Post",
+    files: [
+      { title: "INSTA POST", image: "imatges/arre vf.jpg" },
+    ]
+  },
   {
     title: "BAZOOKA | CODEC",
     category: "Experimental Design",
@@ -54,7 +64,7 @@ const projects = [
       {
         title: "CREDITS",
         files: [
-          { title: "Credits", image: "imatges/magcreds.mov" },
+          { title: "Credits", image: "imatges/magcreds.mp4" },
         ]
       }
     ]

@@ -1,3 +1,4 @@
+
 const projects = [
   {
     id: 'greta',
@@ -41,6 +42,16 @@ const projects = [
     thumbnail: 'images/photo-08.jpg'
   },
   {
+    id: 'bistec',
+    title: 'BISTEC MUSIC + BELLA KANELA + BRAVA | SALA WOLF BCN',
+    year: '2026',
+    category: 'Photography',
+    role: 'Photography',
+    type: 'image',
+    src: 'images/IMG_0086.png',
+    thumbnail: 'images/IMG_0086.png'
+  },
+  {
     id: 'short-film',
     title: 'MAGNIFICENT',
     year: '2025',
@@ -49,19 +60,33 @@ const projects = [
     type: 'youtube',
     src: 'https://www.youtube.com/embed/0XFAxlzHGI4',
     thumbnail: 'images/miniatura-magnificent.png'
+  },
+  {
+    id: 'ad',
+    title: "GIOVANNILLO'S PIZZA - SOCIAL MEDIA AD",
+    year: '2026',
+    category: 'AD',
+    role: 'Assistant Production · Art Assistant',
+    type: 'instagram',
+    src: 'https://www.instagram.com/reel/DYE6uLZsy-X/?psln=MTQ5N2k4eHB2bmpydg==',
+    thumbnail: 'images/miniatura-giovannillos.jpg'
   }
 ];
 
 const photos = [
-  { title: 'greta 1', src: 'images/photo-01.jpg', projectId: 'somewhere', collection: 'GRETA - FOTO' },
-  { title: 'greta 2', src: 'images/photo-02.jpg', landscape: true, projectId: 'somewhere', collection: 'GRETA - FOTO' },
-  { title: 'greta 3', src: 'images/photo-03.jpg', projectId: 'somewhere', collection: 'GRETA - FOTO' },
-  { title: 'greta 3', src: 'images/photo-04.jpg', projectId: 'somewhere', collection: 'GRETA - FOTO' },
-  { title: 'greta 3', src: 'images/photo-05.jpg', projectId: 'somewhere', collection: 'GRETA - FOTO' },
-  { title: 'greta 3', src: 'images/photo-06.jpg', projectId: 'somewhere', collection: 'GRETA - FOTO' },
-  { title: 'greta 3', src: 'images/photo-07.jpg', projectId: 'somewhere', collection: 'GRETA - FOTO' },
-  { title: 'greta 3', src: 'images/photo-08.jpg', projectId: 'somewhere', collection: 'GRETA - FOTO' },
-  { title: 'greta 3', src: 'images/photo-09.jpg', projectId: 'somewhere', collection: 'GRETA - FOTO' }
+  { title: 'greta - cruïlla', src: 'images/photo-01.jpg', projectId: 'somewhere', collection: 'GRETA - FOTO' },
+  { title: 'greta - cruïlla', src: 'images/photo-02.jpg', landscape: true, projectId: 'somewhere', collection: 'GRETA - FOTO' },
+  { title: 'greta - cruïlla', src: 'images/photo-03.jpg', projectId: 'somewhere', collection: 'GRETA - FOTO' },
+  { title: 'greta - cruïlla', src: 'images/photo-04.jpg', projectId: 'somewhere', collection: 'GRETA - FOTO' },
+  { title: 'greta - cruïlla', src: 'images/photo-05.jpg', projectId: 'somewhere', collection: 'GRETA - FOTO' },
+  { title: 'greta - cruïlla', src: 'images/photo-06.jpg', projectId: 'somewhere', collection: 'GRETA - FOTO' },
+  { title: 'greta - cruïlla', src: 'images/photo-07.jpg', projectId: 'somewhere', collection: 'GRETA - FOTO' },
+  { title: 'greta - cruïlla', src: 'images/photo-08.jpg', projectId: 'somewhere', collection: 'GRETA - FOTO' },
+  { title: 'greta - cruïlla', src: 'images/photo-09.jpg', projectId: 'somewhere', collection: 'GRETA - FOTO' },
+  { title: 'BRAVA', src: 'images/IMG_0148.png', projectId: 'bistec', collection: 'BISTEC MUSIC + BELLA KANELA + BRAVA | SALA WOLF BCN' },
+  { title: 'ESTRELLAS DEL RAP NACIONAL', src: 'images/IMG_0086.png', projectId: 'bistec', collection: 'BISTEC MUSIC + BELLA KANELA + BRAVA | SALA WOLF BCN' },
+  { title: 'ESTRELLAS DEL RAP NACIONAL', src: 'images/IMG_0088.png', projectId: 'bistec', collection: 'BISTEC MUSIC + BELLA KANELA + BRAVA | SALA WOLF BCN' },
+  { title: 'BRAVA', src: 'images/IMG_0151.png', projectId: 'bistec', collection: 'BISTEC MUSIC + BELLA KANELA + BRAVA | SALA WOLF BCN' }
 ];
 
 const $ = s => document.querySelector(s);
@@ -247,6 +272,7 @@ function makeWindow(title, kind = '', key = '') {
 
   const cascade = windows.querySelectorAll('.win').length % 4;
   const windowWidth = Math.min(820, desktop.clientWidth - 18);
+
   w.style.left = Math.max(8, (desktop.clientWidth - windowWidth) / 2 + cascade * 18) + 'px';
   w.style.top = Math.max(12, desktop.clientHeight / 2 - 230 + cascade * 16) + 'px';
 
@@ -268,7 +294,9 @@ function makeWindow(title, kind = '', key = '') {
   w.querySelector('.kind').textContent = kind;
 
   const close = w.querySelector('.traffic.close');
+
   close.addEventListener('pointerdown', e => e.stopPropagation());
+
   close.addEventListener('click', e => {
     e.preventDefault();
     e.stopPropagation();
@@ -276,6 +304,7 @@ function makeWindow(title, kind = '', key = '') {
   });
 
   const minimize = w.querySelector('.traffic.min');
+
   minimize.addEventListener('click', e => {
     e.preventDefault();
     e.stopPropagation();
@@ -283,6 +312,7 @@ function makeWindow(title, kind = '', key = '') {
   });
 
   const maximize = w.querySelector('.traffic.max');
+
   maximize.addEventListener('click', e => {
     e.preventDefault();
     e.stopPropagation();
@@ -295,6 +325,7 @@ function makeWindow(title, kind = '', key = '') {
 
   w.addEventListener('pointerdown', () => bringFront(w));
   drag(w.querySelector('.titlebar'), w);
+
   windows.append(w);
   bringFront(w);
 
@@ -319,6 +350,7 @@ function categoryText(category, fallback = 'Film') {
 function openProject(p) {
   const key = `project:${p.id || p.src || p.title}`;
   const existing = getOpenWindow(key);
+
   if (existing) return;
 
   const w = makeWindow(p.title, 'VIDEO', key);
@@ -330,6 +362,7 @@ function openProject(p) {
 
   const info = document.createElement('aside');
   info.className = 'info';
+
   info.innerHTML = `
     <small class="eyebrow">PROJECT</small>
     <h2></h2>
@@ -349,6 +382,7 @@ function openProject(p) {
     v.src = p.src;
     v.onerror = () => missing(media, p.src);
     media.append(v);
+
   } else if (p.type === 'youtube') {
     const f = document.createElement('iframe');
     f.src = p.src;
@@ -356,12 +390,26 @@ function openProject(p) {
     f.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
     f.allowFullscreen = true;
     media.append(f);
+
+  } else if (p.type === 'instagram') {
+    const f = document.createElement('iframe');
+    const reelUrl = p.src.split('?')[0].replace(/\/$/, '') + '/embed';
+
+    f.src = reelUrl;
+    f.title = p.title;
+    f.allowFullscreen = true;
+    f.loading = 'lazy';
+    f.setAttribute('allow', 'autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share');
+
+    media.append(f);
+
   } else if (p.src) {
     const im = document.createElement('img');
     im.src = p.src;
     im.alt = p.title;
     im.onerror = () => missing(media, p.src);
     media.append(im);
+
   } else {
     missing(media);
   }
@@ -375,6 +423,7 @@ function openProject(p) {
 
 function photoWindow(p, pos) {
   const b = document.createElement('div');
+
   b.className = 'photo-window' + (p.landscape ? ' landscape' : '');
   b.style.left = Math.round(pos[0] * desktop.clientWidth) + 'px';
   b.style.top = Math.max(55, Math.round(pos[1] * desktop.clientHeight)) + 'px';
@@ -386,6 +435,7 @@ function photoWindow(p, pos) {
   im.src = p.src;
   im.alt = p.title;
   im.draggable = false;
+
   im.onerror = () => {
     b.classList.add('missing');
     im.remove();
@@ -430,6 +480,7 @@ function photoWindow(p, pos) {
   });
 
   b.addEventListener('pointerdown', () => bringFront(b));
+
   scatter.append(b);
   drag(b, b);
 
@@ -453,9 +504,11 @@ function scatterCollection(project) {
 
 function openPhotos() {
   const existing = getOpenWindow('photos');
+
   if (existing) return;
 
   const w = makeWindow('Photo Archive', 'GALLERY', 'photos');
+  w.style.top = Math.max(12, desktop.clientHeight / 2 - 270) + 'px';
   const gallery = document.createElement('div');
   gallery.className = 'photo-gallery';
 
@@ -467,6 +520,7 @@ function openPhotos() {
     const im = document.createElement('img');
     im.src = p.src;
     im.alt = p.title;
+
     im.onerror = () => {
       item.classList.add('image-missing');
       im.remove();
@@ -507,19 +561,13 @@ function createFallbackIcon(type) {
 function createProjectFiles() {
   const holder = document.createElement('div');
   holder.id = 'project-files';
-
-  holder.style.cssText = `
-    z-index: 3;
-  `;
-
   desktop.append(holder);
 
-  projects.forEach(p => {
+  projects.forEach((p, i) => {
     const b = document.createElement('button');
     b.type = 'button';
     b.className = 'desktop-icon project-icon';
 
-    // Guarda todas las categorías del proyecto.
     b.dataset.category = Array.isArray(p.category)
       ? p.category.join('|')
       : (p.category || '');
@@ -548,6 +596,11 @@ function createProjectFiles() {
     b.append(name);
 
     b.addEventListener('click', () => {
+      if (b.dataset.dragged === 'true') {
+        delete b.dataset.dragged;
+        return;
+      }
+
       document.querySelectorAll('.project-icon.selected')
         .forEach(el => el.classList.remove('selected'));
 
@@ -564,20 +617,76 @@ function createProjectFiles() {
       }
     });
 
+    b.addEventListener('pointerdown', () => bringFront(b));
+
     holder.append(b);
+    drag(b, b);
+  });
+}
+
+// POSICIONES ALEATORIAS DE LOS ARCHIVOS
+
+function randomizeProjectFiles() {
+  const holder = $('#project-files');
+  if (!holder) return;
+
+  const files = [...holder.querySelectorAll('.project-icon')];
+
+  const areaWidth = holder.clientWidth;
+  const areaHeight = holder.clientHeight;
+
+  const occupied = [];
+
+  files.forEach(file => {
+    const fileWidth = file.offsetWidth || 110;
+    const fileHeight = file.offsetHeight || 120;
+
+    const maxX = Math.max(10, areaWidth - fileWidth - 20);
+    const maxY = Math.max(100, areaHeight - fileHeight - 110);
+
+    let x = 20;
+    let y = 100;
+
+    for (let attempt = 0; attempt < 60; attempt++) {
+      x = 20 + Math.random() * Math.max(0, maxX - 20);
+      y = 90 + Math.random() * Math.max(0, maxY - 90);
+
+      const overlaps = occupied.some(pos =>
+        x < pos.x + pos.width + 25 &&
+        x + fileWidth + 25 > pos.x &&
+        y < pos.y + pos.height + 25 &&
+        y + fileHeight + 25 > pos.y
+      );
+
+      if (!overlaps) break;
+    }
+
+    file.style.left = `${x}px`;
+    file.style.top = `${y}px`;
+
+    occupied.push({
+      x,
+      y,
+      width: fileWidth,
+      height: fileHeight
+    });
   });
 }
 
 function keepElementsInDesktop() {
-  [...windows.querySelectorAll('.win'), ...scatter.querySelectorAll('.photo-window')]
-    .forEach(el => {
-      if (el.classList.contains('maximized')) return;
+  [
+    ...windows.querySelectorAll('.win'),
+    ...scatter.querySelectorAll('.photo-window'),
+    ...document.querySelectorAll('.project-icon')
+  ].forEach(el => {
+    if (el.classList.contains('maximized') || el.hidden) return;
 
-      const maxX = Math.max(0, desktop.clientWidth - el.offsetWidth);
-      const maxY = Math.max(0, desktop.clientHeight - 55);
-      el.style.left = `${Math.max(0, Math.min(maxX, el.offsetLeft))}px`;
-      el.style.top = `${Math.max(0, Math.min(maxY, el.offsetTop))}px`;
-    });
+    const maxX = Math.max(0, desktop.clientWidth - el.offsetWidth);
+    const maxY = Math.max(0, desktop.clientHeight - 55);
+
+    el.style.left = `${Math.max(0, Math.min(maxX, el.offsetLeft))}px`;
+    el.style.top = `${Math.max(0, Math.min(maxY, el.offsetTop))}px`;
+  });
 }
 
 function createCategoryBar() {
@@ -593,7 +702,8 @@ function createCategoryBar() {
     ['Photo', 'Photography'],
     ['Music video', 'Music video'],
     ['Art direction', 'Art direction'],
-    ['Postproduction', 'Postproduction']
+    ['Postproduction', 'Postproduction'],
+    ['AD', 'AD']
   ];
 
   const list = bar.querySelector('.category-options');
@@ -621,7 +731,6 @@ function setCategory(category) {
   document.querySelectorAll('.project-icon').forEach(el => {
     const categories = (el.dataset.category || '').split('|');
 
-    // El proyecto aparece si tiene asignada la categoría seleccionada.
     el.hidden = category !== 'All' && !categories.includes(category);
   });
 
@@ -630,14 +739,15 @@ function setCategory(category) {
   });
 
   const folder = $('#photo-folder');
+
   if (folder) {
     folder.hidden = category !== 'All' && category !== 'Photography';
   }
-
 }
 
 function openFilmFolder() {
   const existing = getOpenWindow('film-folder');
+
   if (existing) return;
 
   const w = makeWindow('Film', 'FOLDER', 'film-folder');
@@ -663,6 +773,7 @@ function openFilmFolder() {
 
 function openAbout() {
   const existing = getOpenWindow('about');
+
   if (existing) return;
 
   const w = makeWindow('About.txt', 'TEXT', 'about');
@@ -679,17 +790,46 @@ function openAbout() {
   w.querySelector('.window-content').replaceChildren(d);
 }
 
+['#photo-folder', '#film-folder', '#about-file'].forEach(selector => {
+  const item = $(selector);
+  if (item) drag(item, item);
+});
+
 $('#photo-folder')?.addEventListener('click', () => {
+  const item = $('#photo-folder');
+
+  if (item.dataset.dragged === 'true') {
+    delete item.dataset.dragged;
+    return;
+  }
+
   openPhotos();
-  $('#photo-folder').classList.add('selected');
+  item.classList.add('selected');
 });
 
 $('#film-folder')?.addEventListener('click', () => {
+  const item = $('#film-folder');
+
+  if (item.dataset.dragged === 'true') {
+    delete item.dataset.dragged;
+    return;
+  }
+
   openFilmFolder();
-  $('#film-folder').classList.add('selected');
+  item.classList.add('selected');
 });
 
-$('#about-file')?.addEventListener('click', openAbout);
+$('#about-file')?.addEventListener('click', () => {
+  const item = $('#about-file');
+
+  if (item.dataset.dragged === 'true') {
+    delete item.dataset.dragged;
+    return;
+  }
+
+  openAbout();
+  item.classList.add('selected');
+});
 
 document.querySelectorAll('.dock button').forEach(b => {
   b.addEventListener('click', () => {
@@ -756,5 +896,11 @@ function clock() {
 clock();
 setInterval(clock, 60000);
 
+// INICIAR ESCRITORIO
+
 createProjectFiles();
 createCategoryBar();
+
+requestAnimationFrame(() => {
+  randomizeProjectFiles();
+});
